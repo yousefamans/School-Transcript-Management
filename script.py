@@ -6,6 +6,9 @@ from sqlite3 import Error
 
 from tkinter import *
 
+import tkinter.font as tkFont
+
+
 from pandastable import Table
 
 from pandastable import images
@@ -15,7 +18,9 @@ import matplotlib.pyplot as ppt
 
 import sys
 
-import numpy as np 
+import numpy as np
+
+import time
 
 
 
@@ -24,9 +29,9 @@ import numpy as np
 
 # note that module name has changed from Tkinter in Python 2 to tkinter in Python 3
 gui = Tk()
-gui.geometry("1000x600")
+gui.geometry("1000x650")
 
-gui.attributes("-alpha", 0.89)
+gui.attributes("-alpha", 0.85)
 
 
 
@@ -39,7 +44,7 @@ def show(frame):
 
 
 
-
+frame15 = Frame(gui,bg='#070801')
 frame14 = Frame(gui,bg='#070801')
 frame13 = Frame(gui,bg='#070801')
 frame12 = Frame(gui,bg='#070801')
@@ -54,11 +59,12 @@ frame4 = Frame(gui,bg='#070801')
 frame3 = Frame(gui,bg='#070801')
 frame2 = Frame(gui,bg='#070801')
 frame1 = Frame(gui,bg='#070801')
+frame0 = Frame(gui,bg='#070801')
 
 
 
 
-for frame in (frame14,frame13,frame12,frame11,frame10,frame9,frame8, frame7, frame6, frame5,frame4,frame3, frame2,frame1):
+for frame in (frame15,frame14,frame13,frame12,frame11,frame10,frame9,frame8, frame7, frame6, frame5,frame4,frame3, frame2,frame1,frame0):
     frame.grid(row=0,column=0,sticky='nsew')
 
 
@@ -127,7 +133,7 @@ con = sql_connection()
 
 #sql_table(con,"delete from marks where admsn_no = 1003; ")
 
-data = pd.read_sql("select name,exam,marks from marks ;",con)
+data = pd.read_sql("select id,name,exam,marks from marks ;",con)
 #print(data)
 
 
@@ -141,6 +147,109 @@ def exec_data():
     print(var2.get())
     print(var3.get())
     print(pd.read_sql("select * from attendance ;",con))
+##########################################3 home ############
+
+
+
+    
+fontStyle = tkFont.Font(family="Helvetica", size=18)
+
+  
+tms = Label(frame0, text = 'Students Transcript Management ',font= fontStyle ,bg='#070801' , fg = 'white')
+tms.place(x=300,y=60)
+    
+class12 = Label(frame1,  text="Class: 12",font=('Sans',14) ,bg='#070801' , fg = 'white')
+class12.place(x=825,y=60)
+
+
+
+enter = Button(frame0,text="Enter    ❯",height=2,width=20,font=('Sans',16) , bg='lightblue' ,command = lambda: show(frame1)) 
+enter.place(x=380,y=350, height = 65)
+
+
+
+
+home = Button(frame1,text="⌂",width=5,font=15 ,command = lambda: show(frame0)) 
+home.place(x=0,y=0)
+
+
+marksButton = Button(frame1,text="Marks",height=2,width=20,bg='lightblue' ,font=5,command = lambda: show(frame4)) 
+marksButton.place(x=250,y=260)
+
+
+
+
+
+
+
+attendanceButton = Button(frame1,text="Attendance",height=2,width=20,bg='lightblue' ,font=5,command = lambda: show(frame3)) 
+attendanceButton.place(x=500,y=260)
+
+
+
+
+
+
+time1 = ''
+time2 = time.strftime('%H:%M:%S')
+
+
+
+
+watch = Label(frame1, text=time2, fg= 'white' ,font=('Sans',20,'bold'),height=2,width=10,  bg='#070801')
+watch.place(x=800,y=120)
+
+
+
+def changeLabel():
+    if int(time.strftime('%H')) > int('12') :
+        hour =  int(time.strftime('%H')) - 12
+        
+    time2 = time.strftime(str(hour) + ' : %M: %S')
+    watch.configure(text=time2)
+    frame1.after(200, changeLabel) #it'll call itself continuously
+
+
+
+changeLabel() #first call it manually
+
+
+
+
+
+############
+
+# create label for current time
+lbl = Label(frame0, text='Hello There' , font = ('Sans' , 26),bg='#070801' , fg = '#46e385')
+lbl.place(x= 300 , y= 200)
+
+# run `update_time` first time after 1000ms (1s)
+
+#frame0.after(3000, update_txt) # function name without ()
+#update_time() # or run first time immediately
+
+
+
+
+test_string = "Hello there, Welcome back !!"
+#Time delay between chars, in milliseconds
+delta = 200 
+delay = 0
+for i in range(len(test_string) + 1):
+    s = test_string[:i]
+   
+    update_text = lambda s=s: lbl.configure(text=s)
+    frame0.after(delay, update_text)
+    delay += delta
+
+##############################################
+
+
+
+
+
+
+
 
 
 back = Button(frame2, text=' ← ',height=1,width=4,font=1.5, bg="#46e385",command = lambda: show(frame4)) 
@@ -149,24 +258,24 @@ back.place(x=0,y=0)
 
 
 
-adms_no = Label(frame2, text = "Admission no:",font=25)
+adms_no = Label(frame2, text = "Admission no:",font=25,bg='#070801' , fg = 'white')
 adms_no.place(x=50,y=40)
 
 
-s_name = Label(frame2, text = "Name:",font=25)
+s_name = Label(frame2, text = "Name:",font=25 ,bg='#070801' , fg = 'white')
 s_name.place(x=50,y=80)
 
 
-stream = Label(frame2, text = "Stream:",font=25)
+stream = Label(frame2, text = "Stream:",font=25 ,bg='#070801' , fg = 'white')
 stream.place(x=50,y=120)
 
-exam = Label(frame2, text = "Exam:",font=25)
+exam = Label(frame2, text = "Exam:",font=25 ,bg='#070801' , fg = 'white')
 exam.place(x=50,y=160)
 
-marks = Label(frame2, text = "Marks:",font=25)
+marks = Label(frame2, text = "Marks:",font=25 ,bg='#070801' , fg = 'white')
 marks.place(x=50,y=200)
 
-english = Label(frame2, text = "English:",font=25)
+english = Label(frame2, text = "English:",font=25 ,bg='#070801' , fg = 'white')
 english.place(x=50,y=240)
 
 
@@ -179,7 +288,7 @@ my_list = ["Science / Commerce","Science + IT","Science + Math","Commerce + IT",
 options = StringVar(gui)
 options.set(my_list[0]) # default value
 
-e3 =OptionMenu(frame2, options, *my_list)
+e3 =OptionMenu(frame2, options, *my_list )
 e3.place(x=350,y=120)
 
 
@@ -187,17 +296,17 @@ e3.place(x=350,y=120)
 str_out= StringVar(gui)
 str_out.set("Output")
 
-l2 = Label(frame2,  textvariable=str_out, width=10 )  
+l2 = Label(frame2,  textvariable=str_out, width=10 ,bg='#070801' , fg = 'white')  
 l2.place(x=350,y=160) 
 
 
 
 
 e1 = Entry(frame2,bd=1,width=30)
-e1.place(x=350,y=40)
+e1.place(x=350,y=40,height=30)
 
 e2 = Entry(frame2,bd=1,width=30)
-e2.place(x=350,y=80)
+e2.place(x=350,y=80,height=30)
 
 
 
@@ -205,91 +314,91 @@ e2.place(x=350,y=80)
 
 
 e4 = Entry(frame2,bd=1,width=30)
-e4.place(x=350,y=160)
+e4.place(x=350,y=160,height=30)
 
 
 e5 = Entry(frame2,bd=1,width=30)
-e5.place(x=350,y=200)
+e5.place(x=350,y=200,height=30)
 
 e6 = Entry(frame2,bd=1,width=30)
-e6.place(x=350,y=240)
+e6.place(x=350,y=240,height=30)
 
 
 
 def it():
     global e7
 
-    it = Label(frame2, text = "Informatics:",font=25)
-    it.place(x=50,y=280)
+    it = Label(frame2, text = "Informatics:",font=25 ,bg='#070801' , fg = 'white')
+    it.place(x=50,y=280,height=30)
 
     e7 = Entry(frame2,bd=1,width=30)
-    e7.place(x=350,y=280)
+    e7.place(x=350,y=280,height=30)
 
 def math():
     global e8
 
     
-    maths = Label(frame2, text = "Maths:",font=25)
-    maths.place(x=50,y=320)
+    maths = Label(frame2, text = "Maths:",font=25  ,bg='#070801' , fg = 'white')
+    maths.place(x=50,y=320,height=30)
 
 
     e8 = Entry(frame2,bd=1,width=30)
-    e8.place(x=350,y=320)
+    e8.place(x=350,y=320,height=30)
 
 
 def sci():
 
         
-    chemistry = Label(frame2, text = "Chemistry:",font=25)
+    chemistry = Label(frame2, text = "Chemistry:",font=25 ,bg='#070801' , fg = 'white')
     chemistry.place(x=50,y=360)
 
 
-    biology = Label(frame2, text = "Biology:",font=25)
+    biology = Label(frame2, text = "Biology:",font=25 ,bg='#070801' , fg = 'white')
     biology.place(x=50,y=400)
 
 
-    physics = Label(frame2, text = "Physics:",font=25)
+    physics = Label(frame2, text = "Physics:",font=25 ,bg='#070801' , fg = 'white')
     physics.place(x=50,y=440)
 
 
     global e9
     e9 = Entry(frame2,bd=1,width=30)
-    e9.place(x=350,y=360)
+    e9.place(x=350,y=360,height=30)
 
     global e10
     e10 = Entry(frame2,bd=1,width=30)
-    e10.place(x=350,y=400)
+    e10.place(x=350,y=400,height=30)
 
     global e11
     e11 = Entry(frame2,bd=1,width=30)
-    e11.place(x=350,y=440)
+    e11.place(x=350,y=440,height=30)
 
 def com():
 
         
-    economics = Label(frame2, text = "Economics:",font=25)
+    economics = Label(frame2, text = "Economics:",font=25 ,bg='#070801' , fg = 'white')
     economics.place(x=50,y=480)
 
-    accountancy = Label(frame2, text = "Accountancy:",font=25)
+    accountancy = Label(frame2, text = "Accountancy:",font=25 ,bg='#070801' , fg = 'white')
     accountancy.place(x=50,y=520)
 
 
-    business = Label(frame2, text = "Business:",font=25)
+    business = Label(frame2, text = "Business:",font=25,bg='#070801' , fg = 'white')
     business.place(x=50,y=560)
 
 
 
     global e12
     e12 = Entry(frame2,bd=1,width=30)
-    e12.place(x=350,y=480)
+    e12.place(x=350,y=480,height=30)
 
     global e13    
     e13 = Entry(frame2,bd=1,width=30)
-    e13.place(x=350,y=520)
+    e13.place(x=350,y=520,height=30)
 
     global e14
     e14 = Entry(frame2,bd=1,width=30)
-    e14.place(x=350,y=560)
+    e14.place(x=350,y=560,height=30)
 
 
 
@@ -399,46 +508,87 @@ options.trace('w',my_show)
 
 
 
-#sql_table(con,'CREATE TABLE attendance(id int(5), date date , Samir varchar(4), Lana varchar(4), Harum varchar(4),  Fadu varchar(4) , Albert varchar(4) , Joseph varchar(4)) ;')
+#sql_table(con,'CREATE TABLE attendance(id INTEGER PRIMARY KEY, date date , Samir varchar(4), Lana varchar(4), Harum varchar(4),  Fadu varchar(4) , Albert varchar(4) , Joseph varchar(4)) ;')
 
-#print(pd.read_sql(con,'select * from attendance'))
+def attencance_plot():
+
+    attend = pd.DataFrame(pd.read_sql('select * from attendance ;',con))
+
+
+    attend_data = {'Samir' : attend.query('Samir == "a"').Samir.count() ,
+                              'Lana' : attend.query('Lana == "a"').Lana.count()  ,
+                              'Harum' : attend.query('Harum == "a"').Harum.count()  ,
+                              'Fadu' : attend.query('Fadu == "a"').Fadu.count()  ,
+                              'Albert' : attend.query('Albert == "a"').Albert.count() ,
+                              'Joseph'  : attend.query('Joseph == "a"').Joseph.count() }
+
+    attend_df = pd.DataFrame(attend_data, index = [0])
+
+    attend_df = attend.id.count() - attend_df 
+
+    print(attend_df)
+    print(attend.id.count())
+
+    names = ['Samir', 'Lana', 'Harum', 'Fadu' , 'Albert' , 'Joseph' ]
+
+    values =  [int(attend_df.Samir) , int(attend_df.Lana) , int(attend_df.Harum) , int(attend_df.Fadu) , int(attend_df.Albert) , int(attend_df.Joseph)]
+
+
+    print(values)
+    ppt.bar(names, values)
+    ppt.xlabel('Names')
+    ppt.ylabel('Number of days')
+    ppt.title('Students Attendance ')
+    ppt.show()
+
+#sql_table(con,"drop table attendance ; ")
+
+
+
 
 def attendanceDATA():
     print(var1.get())
-    sql_table(con,("insert into attendance (Samir, Lana , Harum ,  Fadu  , Albert, Joseph) values((?),(?),(?),(?),(?),(?)); ",(var1.get(),var2.get,var3.get(),var4.get(),var5.get(),var6.get())))
-
     
+    cursorObj = con.cursor()
 
-back = Button(frame3, text=' ← ',height=1,width=4,font=1.5, bg="lightyellow",command = lambda: show(frame1)) 
+    cursorObj.execute("insert into attendance (date,Samir, Lana , Harum ,  Fadu  , Albert, Joseph) values( CURRENT_DATE,?,?, ?, ? , ? , ?); ",(var1.get(),var2.get(),var3.get(),var4.get(),var5.get(),var6.get() )  )
+        
+   
+     
+    con.commit()
+
+   
+
+back = Button(frame3, text=' ← ',height=1,width=4,font=1.5 , bg="#46e385" ,command = lambda: show(frame1)) 
 back.place(x=0,y=0)
 
 
-name = Label(frame3, text = "Name:",font=25)
+name = Label(frame3, text = "Name:",font=25 ,bg='#070801' , fg = 'white')
 name.place(x=50,y=40)
 
-state = Label(frame3, text = "Absent / Present",font=25)
+state = Label(frame3, text = "Absent / Present",font=25 ,bg='#070801' , fg = 'white')
 state.place(x=550,y=40)
 
 
-stud1 = Label(frame3, text = "Samir:",font=20)
+stud1 = Label(frame3, text = "Samir:",font=20 ,bg='#070801' , fg = 'white')
 stud1.place(x=60,y=80)
 
 
-stud2 = Label(frame3, text = "Lana:",font=20)
+stud2 = Label(frame3, text = "Lana:",font=20 ,bg='#070801' , fg = 'white')
 stud2.place(x=60,y=140)
 
 
-stud3 = Label(frame3, text = "Hakum:",font=20)
+stud3 = Label(frame3, text = "Harum:",font=20 ,bg='#070801' , fg = 'white')
 stud3.place(x=60,y=200)
 
 
-stud4 = Label(frame3, text = "Fadu:",font=20)
+stud4 = Label(frame3, text = "Fadu:",font=20 ,bg='#070801' , fg = 'white')
 stud4.place(x=60,y=260)
 
-stud5 = Label(frame3, text = "Albert:",font=20)
+stud5 = Label(frame3, text = "Albert:",font=20 ,bg='#070801' , fg = 'white')
 stud5.place(x=60,y=320)
 
-stud6 = Label(frame3, text = "Joseph:",font=20)
+stud6 = Label(frame3, text = "Joseph:",font=20 ,bg='#070801' , fg = 'white')
 stud6.place(x=60,y=380)
 
 
@@ -489,10 +639,24 @@ submit.place(x=550,y=500)
 
 
 
+sub1UnitWISE = Button(frame3,text="Analytics",bg='lightblue',height=2,width=12,font=3,command = attencance_plot) 
+sub1UnitWISE.place(x=750,y=220)
+
+
+updateData = Button(frame3,text="Update Data",bg='lightblue',height=2,width=12,font=5,command = lambda: show(frame13)) 
+updateData.place(x=750,y=300)
+
+
+
+deleteData = Button(frame3,text="Delete Data",bg='red',height=2,width=12,font=5,command = lambda: show(frame15)) 
+deleteData.place(x=750,y=380)
 
 
 
 
+
+
+#####################################################################################################33
 
 # function to change properties of button on hover 
 def changeOnHover(button, colorOnHover, colorOnLeave): 
@@ -552,12 +716,18 @@ com_math.place(x=310,y=400)
 
 
 insertMarks = Button(frame4,text="Insert Marks",bg='lightblue',height=2,width=12,font=5,command = lambda: show(frame2)) 
-insertMarks.place(x=650,y=350)
+insertMarks.place(x=650,y=220)
 
 
 stats = Button(frame4,text="Show Analytics",bg='lightblue',height=2,width=12,font=5,command = lambda: show(frame9)) 
-stats.place(x=650,y=420)
+stats.place(x=650,y=280)
 
+updateData = Button(frame4,text="Update Data",bg='lightblue',height=2,width=12,font=5,command = lambda: show(frame12)) 
+updateData.place(x=650,y=340)
+
+
+deleteData = Button(frame4,text="Delete Data",bg='red',height=2,width=12,font=5,command = lambda: show(frame14)) 
+deleteData.place(x=650,y=400)
 
 
 
@@ -570,7 +740,7 @@ pt = Table(frame5, dataframe=table,showtoolbar=True, showstatusbar=True)
 pt.place(x=100,y=200)
 pt.show()
 
-back1 = Button(frame5, text=' ← ',height=1,width=4,font=1.5, bg="yellow",command = lambda: show(frame4))
+back1 = Button(frame5, text=' ← ',height=1,width=4,font=1.5, bg="#46e385",command = lambda: show(frame4))
 #back1.configure(width = 10, activebackground = "#33B5E5", relief = FLAT)
 back1.place(x=0,y=0)
 
@@ -583,7 +753,7 @@ pt = Table(frame6, dataframe=table1,showtoolbar=True, showstatusbar=True)
 pt.place(x=100,y=200)
 pt.show()
 
-back2 = Button(frame6, text=' ← ',height=1,width=4,font=1.5, bg="yellow",command = lambda: show(frame4))
+back2 = Button(frame6, text=' ← ',height=1,width=4,font=1.5    , bg="#46e385",command = lambda: show(frame4))
 back2.place(x=0,y=0)
 
 
@@ -591,40 +761,30 @@ pt = Table(frame7, dataframe=table2,showtoolbar=True, showstatusbar=True)
 pt.place(x=100,y=200)
 pt.show()
 
-back3 = Button(frame7, text=' ← ',height=1,width=4,font=1.5, bg="yellow",command = lambda: show(frame4))
+back3 = Button(frame7, text=' ← ',height=1,width=4,font=1.5, bg="#46e385",command = lambda: show(frame4))
 back3.place(x=0,y=0)
 
 pt = Table(frame8, dataframe=table3,showtoolbar=True, showstatusbar=True)
 pt.place(x=100,y=200)
 pt.show()
 
-back4 = Button(frame8, text=' ← ',height=1,width=4,font=1.5, bg="yellow",command = lambda: show(frame4))
+back4 = Button(frame8, text=' ← ',height=1,width=4,font=1.5, bg="#46e385",command = lambda: show(frame4))
 back4.place(x=0,y=0)
 
 
 
 
 
-back = Button(frame4, text=' ← ',height=1,width=4,font=1.5, bg="yellow" ,command = lambda: show(frame1))
+back = Button(frame4, text=' ← ',height=1,width=4,font=1.5, bg="#46e385" ,command = lambda: show(frame1))
 back.place(x=0,y=0)
 
 pt.setColumnColors(cols=0, clr='red')
 pt.setColumnColors(cols=[1, 2], clr='green')
 pt.setColumnColors(cols=[-1], clr='#a0a0ff')
 
-##########################################3 home ############
-
-marksButton = Button(frame1,text="Marks",height=2,width=20,font=5,command = lambda: show(frame4)) 
-marksButton.place(x=200,y=260)
 
 
 
-
-
-
-
-attendanceButton = Button(frame1,text="Attendance",height=2,width=20,font=5,command = lambda: show(frame3)) 
-attendanceButton.place(x=450,y=260)
 
 
 
@@ -664,7 +824,7 @@ def statsData():
 
 
 
-toppers = Label(frame9, text = "Top scoring students.",font=20)
+toppers = Label(frame9, text = "Top scoring students.",font=20 ,bg='#070801' , fg = 'white')
 toppers.place(x=60,y=160)
 
 
@@ -681,7 +841,7 @@ studentWISE = Button(frame9,text="Show student wise analytics ",bg='lightblue',h
 studentWISE.place(x=70,y=260)
 
 
-back = Button(frame9, text=' ← ',height=1,width=4,font=1.5, bg="yellow" ,command = lambda: show(frame4))
+back = Button(frame9, text=' ← ',height=1,width=4,font=1.5, bg="#46e385" ,command = lambda: show(frame4))
 back.place(x=0,y=0)
 
 
@@ -746,10 +906,10 @@ def unitWiseMark(name,admsn):
 
 
 
-back = Button(frame10, text=' ← ',height=1,width=4,font=1.5, bg="yellow" ,command = lambda: show(frame9))
+back = Button(frame10, text=' ← ',height=1,width=4,font=1.5, bg="#46e385" ,command = lambda: show(frame9))
 back.place(x=0,y=0)
 
-studentUnitWISE_label = Label(frame10, text = "student's unit wise marks analytics.",font=20)
+studentUnitWISE_label = Label(frame10, text = "student's unit wise marks analytics.",font=20 ,bg='#070801' , fg = 'white')
 studentUnitWISE_label.place(x=60,y=220)
 
 
@@ -757,7 +917,7 @@ studentUnitWISE_label.place(x=60,y=220)
 
     
 
-adm = Label(frame10, text = "Admission no:",font=20)
+adm = Label(frame10, text = "Admission no:",font=20 ,bg='#070801' , fg = 'white')
 adm.place(x=60,y=120)
 
 
@@ -767,7 +927,7 @@ adm_no.place(x=180,y=120,height=30)
 
 
 
-stud_name = Label(frame10, text = "Student's Name:",font=20)
+stud_name = Label(frame10, text = "Student's Name:",font=20 ,bg='#070801' , fg = 'white')
 stud_name.place(x=460,y=120)
 
 
@@ -852,7 +1012,7 @@ def unitSubjectWise(name,admsn,exam):
 
 
 
-subUnitWISE_label = Label(frame10, text = "student's subject wise marks analytics.",font=20)
+subUnitWISE_label = Label(frame10, text = "student's subject wise marks analytics.",font=20 , bg='#070801' , fg = 'white')
 subUnitWISE_label.place(x=60,y=320)
 
 
@@ -862,7 +1022,7 @@ sub1UnitWISE.place(x=470,y=320)
 ################################# Exam List #################3
 
 
-back = Button(frame11, text=' ← ',height=1,width=4,font=1.5, bg="yellow" ,command = lambda: show(frame10))
+back = Button(frame11, text=' ← ',height=1,width=4,font=1.5, bg="#46e385" ,command = lambda: show(frame10))
 back.place(x=0,y=0)
 
 examU1 = Button(frame11,text="Unit 1",bg='lightblue',height=2,width=20,font=5,command = lambda: unitSubjectWise(student_name.get(),adm_no.get() , 'u1' )) 
@@ -879,7 +1039,6 @@ examT1.place(x=350,y=400)
 
 examT2 = Button(frame11,text="Term 2",bg='lightblue',height=2,width=20,font=5,command = lambda: unitSubjectWise(student_name.get(),adm_no.get() , 't2' ))  
 examT2.place(x=350,y=500)
-
 
 
 
@@ -1074,12 +1233,213 @@ def AllUnitsSubjectWise(name,admsn):
 
 
 
-AllUnitWISE_label = Label(frame10, text = "student's subject wise marks analytics for all units.",font=20)
+AllUnitWISE_label = Label(frame10, text = "student's subject wise marks analytics for all units.",font=20 ,bg='#070801' , fg = 'white')
 AllUnitWISE_label.place(x=60,y=420)
 
 
 AllUnitWISE = Button(frame10,text="Show",bg='lightblue',height=2,width=26,font=5,command = lambda: AllUnitsSubjectWise(student_name.get(),adm_no.get())) 
 AllUnitWISE.place(x=470,y=420)
+
+#################################
+####################
+#################3
+
+
+
+back = Button(frame12, text=' ← ',height=1,width=4,font=1.5, bg="#46e385" ,command = lambda: show(frame4))
+back.place(x=0,y=0)
+  
+row = Label(frame12,  text="ID number:",font=25 ,bg='#070801' , fg = 'white')
+row.place(x=350,y=20)
+
+
+row_id = Entry(frame12,bd=1,width=30)
+row_id.place(x=350,y=60,height=30)
+
+
+column_list = ["select column","admsn_no","name","stream", "exam","marks","english","informatics","math", "chemistry", "biology"  , "physics", "economics" , "accountancy" , "business_studies"]
+column_options = StringVar(gui)
+column_options.set(column_list[0]) # default value
+
+column = OptionMenu(frame12, column_options, *column_list)
+column.place(x=350,y=120)
+
+
+
+ 
+
+   
+update1 = Label(frame12,  text="New value:",font=25 ,bg='#070801' , fg = 'white')
+update1.place(x=350,y=200)
+
+update_value = Entry(frame12,bd=1,width=30)
+update_value.place(x=350,y=250,height=30)
+
+   
+
+
+
+
+def column_show(*args):
+     str_out.set(column_options.get())
+
+     cursorObj = con.cursor()
+     
+     
+
+
+     qry = "update marks set " + column_options.get() +"= ? where id = ? ;"
+ 
+     cursorObj.execute(qry,(update_value.get()  , row_id.get()     ))
+     con.commit()
+
+
+    
+
+
+        
+
+column_options.trace('w',column_show)
+
+
+def sequence(*functions):
+    def func(*args, **kwargs):
+        return_value = None
+        for function in functions:
+            return_value = function(*args, **kwargs)
+        return return_value
+    return func
+
+update = Button(frame12,text="Update",height=2,width=20,bg='lightblue' ,font=5,command = sequence(lambda: sql_table(con,"select * from marks;"), column_show )) 
+update.place(x=350,y=400)
+
+
+
+
+
+
+
+
+
+#########################3
+
+ 
+back = Button(frame13, text=' ← ',height=1,width=4,font=1.5, bg="#46e385" ,command = lambda: show(frame3))
+back.place(x=0,y=0)
+
+row1 = Label(frame13,  text="ID number:",font=25 ,bg='#070801' , fg = 'white')
+row1.place(x=350,y=20)
+
+
+row_id1 = Entry(frame13,bd=1,width=30)
+row_id1.place(x=350,y=60,height=30)
+
+
+column_list1 = ["select column","id","date","Samir","Lana", "Harum","Fadu","Albert","Joseph"]
+column_options1 = StringVar(gui)
+column_options1.set(column_list1[0]) # default value
+
+column1 = OptionMenu(frame13, column_options1, *column_list1)
+column1.place(x=350,y=120)
+
+
+
+ 
+
+   
+newValue = Label(frame13,  text="New value:",font=25 ,bg='#070801' , fg = 'white')
+newValue.place(x=350,y=200)
+
+new_value = Entry(frame13,bd=1,width=30)
+new_value.place(x=350,y=250,height=30)
+
+   
+
+
+
+print(data)
+
+def column_show1(*args):
+     str_out.set(column_options.get())
+
+     cursorObj = con.cursor()
+     
+     
+
+
+     qry = "update attendance set " + column_options1.get() +"= ? where id = ? ;"
+ 
+     cursorObj.execute(qry,(new_value.get()  , row_id1.get()     ))
+     con.commit()
+
+
+     
+     print(pd.read_sql("select * from attendance;",con))
+
+    
+
+
+        
+
+column_options1.trace('w',column_show1)
+
+
+
+
+updateA = Button(frame13,text="Update",height=2,width=20,bg='lightblue' ,font=5,command = sequence(lambda: print(pd.read_sql("select * from attendance;",con)), column_show1 )) 
+updateA.place(x=350,y=400)
+
+
+
+#########################################
+
+
+
+
+back = Button(frame14, text=' ← ',height=1,width=4,font=1.5, bg="#46e385",command = lambda: show(frame4))
+back.place(x=0,y=0)
+
+
+  
+row2 = Label(frame14,  text="ID number:",font=25 ,bg='#070801' , fg = 'white')
+row2.place(x=350,y=100)
+
+
+row_id2 = Entry(frame14,bd=1,width=30)
+row_id2.place(x=350,y=150,height=30)
+
+
+
+def deleteData():
+    sql_table(con,"delete from marks where id = " +row_id2.get() + ";" )
+
+updateA = Button(frame14,text="=Delete",height=2,width=20,bg='red' ,font=5,command = sequence( deleteData ,  lambda: print(pd.read_sql("select * from marks;",con)))) 
+updateA.place(x=350,y=300)
+
+
+############################################
+
+back = Button(frame15, text=' ← ',height=1,width=4,font=1.5, bg="#46e385",command = lambda: show(frame3))
+back.place(x=0,y=0)
+
+
+  
+row3 = Label(frame15,  text="ID number:",font=25 ,bg='#070801' , fg = 'white')
+row3.place(x=350,y=100)
+
+
+row_id3 = Entry(frame15,bd=1,width=30)
+row_id3.place(x=350,y=150,height=30)
+
+
+
+def deleteData():
+    sql_table(con,"delete from attendance where id = " +row_id3.get() + ";" )
+
+updateA1 = Button(frame15,text="Delete",height=2,width=20,bg='red' ,font=5,command = sequence( deleteData ,  lambda: print(pd.read_sql("select * from attendance;",con)))) 
+updateA1.place(x=350,y=300)
+
+
 
 
 
